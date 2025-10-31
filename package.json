@@ -1,0 +1,20 @@
+{
+  "name": "tool-assistant-api",
+  "version": "1.0.0",
+  "description": "API of AI assistant for voice commands using Anthropic SDK.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "keywords": ["ai", "assistant", "anthropic", "voice-commands"],
+  "author": "GM&CC",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.21.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "@anthropic-ai/sdk": "^0.32.1"
+  }
+}
