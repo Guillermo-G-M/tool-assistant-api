@@ -1,10 +1,26 @@
 import { executeFunction } from '../../assistant.js';
 
 export async function handler(event, context) {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+  };
+
+  // Handle OPTIONS preflight request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers: corsHeaders,
+      body: ''
+    };
+  }
+
   // Only allow POST requests
   if (event.httpMethod !== 'POST') {
     return {
       statusCode: 405,
+      headers: corsHeaders,
       body: JSON.stringify({ error: 'Method not allowed' })
     };
   }
@@ -17,7 +33,7 @@ export async function handler(event, context) {
         statusCode: 400,
         headers: {
           'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*'
+          ...corsHeaders
         },
         body: JSON.stringify({ error: 'Missing transcription' })
       };
@@ -29,7 +45,7 @@ export async function handler(event, context) {
       statusCode: 200,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        ...corsHeaders
       },
       body: JSON.stringify(result)
     };
@@ -39,7 +55,7 @@ export async function handler(event, context) {
       statusCode: 500,
       headers: {
         'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*'
+        ...corsHeaders
       },
       body: JSON.stringify({ error: 'Error processing the request' })
     };
