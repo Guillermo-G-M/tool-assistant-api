@@ -5,33 +5,40 @@ import { executeFunction } from './assistant.js';
 
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
+const SERVERLESS_ENABLED = process.env.SERVERLESS_ENABLED === 'true';
 
-app.use(cors());
-app.use(express.json());
+if (SERVERLESS_ENABLED) {
+  console.log('Serverless mode enabled. Server will not start.');
+  console.log('Deploy to Netlify to use serverless functions.');
+} else {
+  const app = express();
+  const PORT = process.env.PORT || 3000;
 
-app.post('/exec_function', async (req, res) => {
-  try {
-    const { transcription } = req.body;
+  app.use(cors());
+  app.use(express.json());
 
-    if (!transcription) {
-      return res.status(400).json({ error: 'Missing transcription' });
+  app.post('/exec_function', async (req, res) => {
+    try {
+      const { transcription } = req.body;
+
+      if (!transcription) {
+        return res.status(400).json({ error: 'Missing transcription' });
+      }
+
+      const result = await executeFunction(transcription);
+
+      res.json(result);
+    } catch (error) {
+      console.error('Error in /exec_function:', error);
+      res.status(500).json({ error: 'Error processing the request' });
     }
+  });
 
-    const result = await executeFunction(transcription);
+  app.get('/health', (req, res) => {
+    res.json({ status: 'ok', message: 'API is running OK' });
+  });
 
-    res.json(result);
-  } catch (error) {
-    console.error('Error in /exec_function:', error);
-    res.status(500).json({ error: 'Error processing the request' });
-  }
-});
-
-app.get('/health', (req, res) => {
-  res.json({ status: 'ok', message: 'API is running OK' });
-});
-
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+  app.listen(PORT, () => {
+    console.log(`Server listening on port ${PORT}`);
+  });
+}
