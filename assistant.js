@@ -11,15 +11,7 @@ const client = new Anthropic({
 export async function executeFunction(userMessage) {
   try {
 
-    const response = await client.messages.create({
-      ...config,
-      messages: [
-        {
-          role: 'user',
-          content: userMessage
-        }
-      ]
-    });
+    const response = await client.messages.create(config(userMessage));
 
     if (showResponseLogs) console.log('Assistant response:', JSON.stringify(response, null, 2));
 

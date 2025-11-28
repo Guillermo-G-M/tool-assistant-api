@@ -1,4 +1,6 @@
 node_modules
 .env
 package-lock.json
-
+configs/*
+!configs/config.json
+!configs/assistant-config.default.json

@@ -1,17 +1,28 @@
-// Default configuration for the assistant AI
-// You can modify this file to customize the behavior of the assistant
-import tools from './tools.js';
+// Configuration module
+// This module reads the assistant-config.json file and exports the configuration
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const MODEL = 'claude-haiku-4-5-20251001';
-const SYSTEM_PROMPT = `You are an assistant tasked with executing only the tool functions you have defined.`;
-const MAX_TOKENS = 1024;
-const TOOLS = tools;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-export const config = {
-    model: MODEL,
-    max_tokens: MAX_TOKENS,
-    tools: TOOLS,
-    system: SYSTEM_PROMPT
+const configPath = join(__dirname, 'assistant-config.json');
+const configData = JSON.parse(readFileSync(configPath, 'utf-8'));
+
+export const config = (userMessage) => {
+    return {
+        model: configData.model,
+        max_tokens: configData.max_tokens,
+        tools: configData.tools,
+        system: configData.system,
+        messages: [
+            {
+                role: 'user',
+                content: userMessage
+            }
+        ]
+    }
 };
 
-export const showResponseLogs = false;
+export const showResponseLogs = configData.showResponseLogs;
