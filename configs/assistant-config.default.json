@@ -1,94 +1,143 @@
 {
   "model": "claude-haiku-4-5-20251001",
   "max_tokens": 1024,
-  "system": "You are an assistant tasked with executing only the tool functions you have defined.",
+  "system": "Eres un asistente del Sistema de Gestión de Restaurant Concurrente. Tu tarea es ayudar a los meseros y administradores a consultar el estado del sistema y ejecutar acciones. Puedes obtener información sobre el buffer de pedidos, recursos de cocina, estado de meseros y cocineros, y controlar el sistema.",
   "showResponseLogs": false,
   "tools": [
     {
-      "name": "change_lang",
-      "description": "Changes the language of the application. Supports Spanish (es) and English (en).",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "lang": {
-            "type": "string",
-            "enum": ["es", "en"],
-            "description": "Language code to set"
-          }
-        },
-        "required": ["lang"]
-      }
-    },
-    {
-      "name": "toggle_high_contrast",
-      "description": "Activates or deactivates high contrast mode in the application.",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "enable": {
-            "type": "boolean",
-            "description": "true to activate, false to deactivate"
-          }
-        },
-        "required": ["enable"]
-      }
-    },
-    {
-      "name": "toggle_voice",
-      "description": "Activates or deactivates voice functionality in the application.",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "enable": {
-            "type": "boolean",
-            "description": "true to activate, false to deactivate"
-          }
-        },
-        "required": ["enable"]
-      }
-    },
-    {
-      "name": "search_jobs",
-      "description": "Searches for jobs in the application with the specified criteria.",
-      "input_schema": {
-        "type": "object",
-        "properties": {
-          "searchTerm": {
-            "type": "string",
-            "description": "Search term (job, company, keyword)."
-          },
-          "location": {
-            "type": "string",
-            "description": "Search location without accentuation."
-          },
-          "jobType": {
-            "type": "string",
-            "description": "Job type without accentuation."
-          },
-          "remoteOnly": {
-            "type": "boolean",
-            "description": "Only remote jobs."
-          }
-        }
-      }
-    },
-    {
-      "name": "clear_filters",
-      "description": "Clears all search filters in the job search application.",
+      "name": "get_buffer_status",
+      "description": "Obtiene el estado actual del buffer circular de pedidos, incluyendo capacidad, ocupación, pedidos insertados y extraídos.",
       "input_schema": {
         "type": "object",
         "properties": {}
       }
     },
     {
+      "name": "get_resource_status",
+      "description": "Obtiene el estado de los recursos de cocina: hornos, parrillas y freidoras (cuántos están ocupados y disponibles).",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "get_meseros_status",
+      "description": "Obtiene el estado de todos los meseros (productores): nombres, pedidos generados, estado actual de cada uno.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "get_cocineros_status",
+      "description": "Obtiene el estado de todos los cocineros (consumidores): nombres, pedidos procesados, estado actual de cada uno.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "get_estadisticas",
+      "description": "Obtiene estadísticas generales del sistema: total de pedidos generados, procesados, tiempo promedio, eficiencia.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "iniciar_sistema",
+      "description": "Inicia el sistema de restaurant (crea meseros y cocineros, y comienza la operación).",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "pausar_sistema",
+      "description": "Pausa el sistema de restaurant (suspende threads pero mantiene el estado). Los meseros y cocineros dejan de trabajar temporalmente.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "reanudar_sistema",
+      "description": "Reanuda el sistema de restaurant pausado (reactiva threads). Los meseros y cocineros continúan desde donde quedaron pausados.",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "resetear_sistema",
+      "description": "Resetea el sistema al estado inicial (detiene completamente y limpia todo).",
+      "input_schema": {
+        "type": "object",
+        "properties": {}
+      }
+    },
+    {
+      "name": "hacer_pedido_mesero",
+      "description": "Crea un pedido desde un mesero manual. Extrae mesa e items del mensaje en lenguaje natural. Items disponibles: Pizza Margarita, Pizza Pepperoni, Hamburguesa Clásica, Bife de Chorizo, Papas Fritas, Aros de Cebolla, Ensalada César, Ensalada Mixta, Coca Cola, Agua Mineral.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "mesa": {
+            "type": "integer",
+            "description": "Número de mesa (1-20)"
+          },
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Lista de nombres de items del menú solicitados"
+          },
+          "mesero_id": {
+            "type": "integer",
+            "description": "ID del mesero que hace el pedido"
+          }
+        },
+        "required": ["mesa", "items"]
+      }
+    },
+    {
+      "name": "ajustar_velocidad_meseros",
+      "description": "Ajusta la velocidad de generación de pedidos de los meseros.",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "velocidad": {
+            "type": "string",
+            "enum": ["lenta", "normal", "rapida"],
+            "description": "Velocidad de generación: lenta (5-8s), normal (2-5s), rapida (1-2s)"
+          }
+        },
+        "required": ["velocidad"]
+      }
+    },
+    {
+      "name": "recomendar_accion",
+      "description": "Analiza el estado actual del sistema y recomienda una acción (agregar meseros, cocineros, ajustar velocidad, etc).",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "contexto": {
+            "type": "string",
+            "description": "Contexto o problema específico a analizar"
+          }
+        }
+      }
+    },
+    {
       "name": "cannot_perform_action",
-      "description": "Used when the user requests an action that is not available in the application. Inform the user that you do not have access to that function.",
+      "description": "Se usa cuando el usuario solicita una acción que no está disponible en el sistema. Informa al usuario que no tienes acceso a esa función.",
       "input_schema": {
         "type": "object",
         "properties": {
           "requested_action": {
             "type": "string",
-            "description": "Brief description of the action requested by the user"
+            "description": "Descripción breve de la acción solicitada por el usuario"
           }
         },
         "required": ["requested_action"]
