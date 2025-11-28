@@ -1,6 +1,6 @@
 [build]
   command = "npm install"
-  functions = "netlify/functions"
+  functions = "serverless/functions"
   publish = "."
 
 [functions]
@@ -9,15 +9,15 @@
 
 [[redirects]]
   from = "/api/*"
-  to = "/.netlify/functions/:splat"
+  to = "/.serverless/functions/:splat"
   status = 200
 
 [[redirects]]
   from = "/exec_function"
-  to = "/.netlify/functions/exec_function"
+  to = "/.serverless/functions/exec_function"
   status = 200
 
 [[redirects]]
   from = "/health"
-  to = "/.netlify/functions/health"
+  to = "/.serverless/functions/health"
   status = 200

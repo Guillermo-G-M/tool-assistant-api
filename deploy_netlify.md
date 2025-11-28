@@ -52,7 +52,7 @@ netlify deploy --prod
 4. Configure build settings:
    - **Build command:** `npm install`
    - **Publish directory:** `.`
-   - **Functions directory:** `netlify/functions`
+   - **Functions directory:** `serverless/functions`
 
 5. Add environment variables in Site settings > Environment variables:
    - `ANTHROPIC_API_KEY`: Your Anthropic API key
@@ -67,7 +67,7 @@ The `netlify.toml` file contains all deployment configuration:
 ```toml
 [build]
   command = "npm install"
-  functions = "netlify/functions"
+  functions = "serverless/functions"
   publish = "."
 
 [functions]
@@ -79,17 +79,17 @@ The `netlify.toml` file contains all deployment configuration:
 
 The following URL redirects are configured:
 
-- `/exec_function` → `/.netlify/functions/exec_function`
-- `/health` → `/.netlify/functions/health`
-- `/api/*` → `/.netlify/functions/:splat`
+- `/exec_function` → `/.serverless/functions/exec_function`
+- `/health` → `/.serverless/functions/health`
+- `/api/*` → `/.serverless/functions/:splat`
 
 ## Serverless Mode
 
 When `SERVERLESS_ENABLED=true`, the application runs in serverless mode using Netlify Functions instead of Express server.
 
 **Serverless Functions:**
-- `netlify/functions/exec_function.js` - Main AI assistant endpoint
-- `netlify/functions/health.js` - Health check endpoint
+- `serverless/functions/exec_function.js` - Main AI assistant endpoint
+- `serverless/functions/health.js` - Health check endpoint
 
 ## Usage After Deployment
 
@@ -157,7 +157,7 @@ netlify dev
 ## Troubleshooting
 
 **Function not found:**
-- Verify `netlify/functions/` directory exists
+- Verify `serverless/functions/` directory exists
 - Check function files have `.js` extension
 - Ensure functions export `handler` function
 
