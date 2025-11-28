@@ -99,6 +99,89 @@
 							"body": "{\n    \"success\": true,\n    \"function\": \"change_lang\",\n    \"parameters\": {\n        \"lang\": \"es\"\n    }\n}"
 						}
 					]
+				},
+				{
+					"name": "Update Config",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"model\": \"claude-opus-4-20250514\",\r\n    \"max_tokens\": 2048,\r\n    \"system\": \"You are an assistant tasked with executing only the tool functions you have defined.\",\r\n    \"showResponseLogs\": true,\r\n    \"tools\": [\r\n        {\r\n            \"name\": \"change_lang\",\r\n            \"description\": \"Changes the language of the application.\",\r\n            \"input_schema\": {\r\n                \"type\": \"object\",\r\n                \"properties\": {\r\n                    \"lang\": {\r\n                        \"type\": \"string\",\r\n                        \"enum\": [\"es\", \"en\"],\r\n                        \"description\": \"Language code to set\"\r\n                    }\r\n                },\r\n                \"required\": [\"lang\"]\r\n            }\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/update_config",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"update_config"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "Update Config - Example",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"model\": \"claude-opus-4-20250514\",\r\n    \"max_tokens\": 2048,\r\n    \"system\": \"You are an assistant tasked with executing only the tool functions you have defined.\",\r\n    \"showResponseLogs\": true,\r\n    \"tools\": [\r\n        {\r\n            \"name\": \"change_lang\",\r\n            \"description\": \"Changes the language of the application.\",\r\n            \"input_schema\": {\r\n                \"type\": \"object\",\r\n                \"properties\": {\r\n                    \"lang\": {\r\n                        \"type\": \"string\",\r\n                        \"enum\": [\"es\", \"en\"],\r\n                        \"description\": \"Language code to set\"\r\n                    }\r\n                },\r\n                \"required\": [\"lang\"]\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{url}}/update_config",
+									"host": [
+										"{{url}}"
+									],
+									"path": [
+										"update_config"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "Date",
+									"value": "Fri, 28 Nov 2025 05:30:00 GMT"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"success\": true,\n    \"message\": \"Configuration updated successfully\"\n}"
+						}
+					]
 				}
 			]
 		}
