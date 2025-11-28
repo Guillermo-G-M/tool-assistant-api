@@ -4,3 +4,5 @@ package-lock.json
 configs/*
 !configs/config.json
 !configs/assistant-config.default.json
+!configs/cache.js
+cache_data/
