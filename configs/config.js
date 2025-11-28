@@ -4,10 +4,20 @@ import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+let configPath;
 
-const configPath = join(__dirname, 'assistant-config.json');
+// Handle different environments (local vs serverless)
+try {
+  if (import.meta.url) {
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = dirname(__filename);
+    configPath = join(__dirname, 'assistant-config.json');
+  }
+} catch (error) {
+  // Fallback for serverless environment
+  configPath = join(process.cwd(), 'configs', 'assistant-config.json');
+}
+
 const configData = JSON.parse(readFileSync(configPath, 'utf-8'));
 
 export const config = (userMessage) => {
